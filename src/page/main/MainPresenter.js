@@ -1,6 +1,7 @@
 import React from 'react';
 import { Layout, Menu, Breadcrumb } from 'antd';
 import MainSiser from '../../component/MainSider';
+import './Main.css';
 const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -20,10 +21,12 @@ const MainPresenter = () => {
           className="site-layout-background"
           style={{ padding: '24px 0' }}
         >
-          <Sider className="site-layout-background" width={200}>
+          <Sider className="site-layout-background" trigger={null} width={200}>
             <MainSiser />
           </Sider>
-          <Content style={{ padding: '0 24px', minHeight: 280 }}>
+          <Content
+            style={{ padding: '0 24px', minHeight: 280, height: '100%' }}
+          >
             Content
           </Content>
         </Layout>
