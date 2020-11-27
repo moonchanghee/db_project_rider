@@ -2,11 +2,7 @@ import React, { useEffect } from 'react';
 import MainPresenter from './MainPresenter';
 
 const MainContainer = () => {
-  return (
-    <div>
-      <MainPresenter />
-    </div>
-  );
+  return <MainPresenter></MainPresenter>;
 };
 
 export default MainContainer;
