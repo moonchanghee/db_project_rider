@@ -1,8 +1,21 @@
 import React, { useState } from 'react';
-import { Input, Button, Table, Modal, Checkbox, Form, Col } from 'antd';
+import {
+  Input,
+  Button,
+  Table,
+  Modal,
+  Checkbox,
+  Form,
+  Row,
+  Col,
+  Space,
+  Typography,
+} from 'antd';
+const { Text, Link } = Typography;
 const { Search } = Input;
 
 const RiderManagePresenter = () => {
+  const [size, setSize] = useState(30);
   const [visible, setVisible] = useState(false);
   const [riderData, setRiderData] = useState([{}]);
   const onSearch = (value) => console.log(value);
@@ -146,25 +159,49 @@ const RiderManagePresenter = () => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Col span={8}>
-          <p>{riderData.key}</p>
-          <p>{riderData.name}</p>
-          <p>{riderData.age}</p>
-          <p>{riderData.address}</p>
-          <p>{riderData.riderNo}</p>
-          <p>{riderData.endRiderNo}</p>
-          <p>{riderData.phoneNo}</p>
-          <p>{riderData.upgrade}</p>
-        </Col>
-        <Col span={8}>
+        <Row gutter={[16, 24]}>
+          <Col className="gutter-row" span={6}>
+            번호: <Text code>{riderData.key}</Text>
+          </Col>
+          <Col className="gutter-row" span={6}>
+            이름: <Text code>{riderData.name}</Text>
+          </Col>
+          <Col className="gutter-row" span={6}>
+            나이: <Text code>{riderData.age}</Text>
+          </Col>
+          <Col className="gutter-row" span={6}>
+            전화번호:
+            <Text code>{riderData.phoneNo}</Text>
+          </Col>
+          <Col className="gutter-row" span={6}>
+            주소:<Text code>{riderData.address}</Text>
+          </Col>
+          <Col className="gutter-row" span={6}>
+            면허 번호:
+            <Text code>{riderData.riderNo}</Text>
+          </Col>
+          <Col className="gutter-row" span={6}>
+            면허 만료일:
+            <Text code>{riderData.endRiderNo}</Text>
+          </Col>
+          <Col className="gutter-row" span={6}>
+            등급 상승 예정 일자: <Text code>{riderData.upgrade}</Text>
+          </Col>
+        </Row>
+
+        <div style={{ float: 'left' }}>
           <Checkbox onChange={onChange}>경고유무</Checkbox>
+        </div>
+        <div style={{ float: 'right' }}>
           <Form.Item label="점수">
-            <Input style={{ width: '10%' }} />
+            <Input />
           </Form.Item>
+        </div>
+        <div style={{ float: 'right' }}>
           <Form.Item label="등급">
-            <Input style={{ width: '10%' }} />
+            <Input value={riderData.grade} />
           </Form.Item>
-        </Col>
+        </div>
         <Table
           columns={Modalcolumns}
           dataSource={ModalcolumnsData}

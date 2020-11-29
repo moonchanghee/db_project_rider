@@ -4,22 +4,15 @@ import { Select, Input, Button, List, Typography } from 'antd';
 
 const { Option } = Select;
 
-const SurchargePresenter = () => {
-  const data = [
-    {
-      gu: 'gu',
-      dong: 'dong',
-      price: 'price',
-    },
-  ];
-  const datas = [
-    {
-      gu: 'gu',
-      dong: 'dong',
-      price: 'price',
-    },
-  ];
-  useEffect(() => {}, [datas]);
+const SurchargePresenter = ({ states, callbacks }) => {
+  // const data = [
+  //   {
+  //     gu: 'gu',
+  //     dong: 'dong',
+  //     price: 'price',
+  //   },
+  // ];
+
   const [gu, setGu] = useState();
   const [dong, setDong] = useState();
   const [price, setPrice] = useState();
@@ -38,14 +31,28 @@ const SurchargePresenter = () => {
     console.log(e);
     setPrice(e);
   };
-  const ADD = () => {
-    data['gu'] = gu;
-    data['dong'] = dong;
-    data['price'] = price;
-    console.log(data);
-    datas.push(data);
-    console.log(datas);
+  const success = () => {
+    console.log(states.data);
   };
+  const ADD = () => {
+    // data['gu'] = gu;
+    // data['dong'] = dong;
+    // data['price'] = price;
+    // data.push({
+    //   gu: gu,
+    //   dong: dong,
+    //   price: price,
+    // });
+    callbacks.add(gu, dong, price);
+  };
+  let listItem = states.data.map((e) => {
+    console.log(e);
+    if (e != undefined) {
+      return <SurchargeData props={e}></SurchargeData>;
+    } else {
+      return;
+    }
+  });
   return (
     <div>
       <div
@@ -102,7 +109,7 @@ const SurchargePresenter = () => {
       </div>
       <div
         style={{
-          backgroundColor: '#D358F7',
+          backgroundColor: '#ffffff',
           width: '700px',
           height: '613px',
           float: 'right',
@@ -116,23 +123,10 @@ const SurchargePresenter = () => {
           height: '350px',
         }}
       >
-        {/**   <List
-          bordered
-          dataSource={datas}
-          renderItem={(item) => (
-            <List.Item>
-              <Typography.Text mark></Typography.Text> {item.gu}
-              {item.dong}
-              {item.price}
-              <Button style={{ float: 'right' }}>삭제</Button>
-            </List.Item>
-          )}
-        />
-        <Button style={{ marginLeft: '80%', marginTop: '3%' }}>선택완료</Button>*/}
-        {datas.map((e) => {
-          console.log(e);
-          return <SurchargeData props={e} />;
-        })}
+        <List pagination="true">
+          {listItem}
+          <Button onClick={success}>선택완료</Button>
+        </List>
       </div>
     </div>
   );

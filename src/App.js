@@ -64,7 +64,13 @@ const App = ({ states, callbacks }) => {
               <Route exact path="/main/insert" component={Insert} />
             </Switch>
             <Switch>
-              <Route exact path="/main/surcharge" component={Surcharge} />
+              <Route
+                exact
+                path="/main/surcharge"
+                render={(props) => (
+                  <Surcharge {...props} states={states} callbacks={callbacks} />
+                )}
+              />
             </Switch>
           </Layout>
           <Footer style={{ textAlign: 'center' }}>dbrider</Footer>

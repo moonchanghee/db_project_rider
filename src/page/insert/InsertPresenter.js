@@ -47,7 +47,7 @@ const data = [
 
 const InsertPresenter = () => {
   const [inputReason, setInputReason] = useState(false);
-  const [reason, setReason] = useState('벌점사유');
+  const [reason, setReason] = useState('사유 선택');
   const [resultReason, setResultReason] = useState();
   const [area, setArea] = useState();
   const [orderNo, setOrderNo] = useState();
