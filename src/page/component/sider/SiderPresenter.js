@@ -18,7 +18,7 @@ const SiderPresenter = (props) => {
             style={{ minHeight: '100vh' }}
           >
             <Menu.Item key="1">
-              <Link to={{ pathname: '/main' }}>주문현황</Link>
+              <Link to={{ pathname: '/main' }}>매장 주문현황</Link>
             </Menu.Item>
             <Menu.Item key="2">
               <Link to={{ pathname: '/main/insert' }}>매장 주문확인</Link>

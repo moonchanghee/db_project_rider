@@ -1,21 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import SurchargeData from './SurchargeData';
-import { Select, Input, Button, List, Typography } from 'antd';
+import { Select, Input, Button, List, Typography, Table } from 'antd';
 
 const { Option } = Select;
-
+const columns = [
+  {
+    title: '코드',
+    dataIndex: 'code',
+  },
+  {
+    title: '지역',
+    dataIndex: 'area',
+  },
+  {
+    title: '추가금액',
+    dataIndex: 'tip',
+  },
+];
+const data = [
+  {
+    code: '1',
+    area: '엄궁동',
+    tip: 3000,
+  },
+  {
+    code: '2',
+    area: '하단2동',
+    tip: 1000,
+  },
+  {
+    code: '3',
+    area: '하단동',
+    tip: 500,
+  },
+];
 const SurchargePresenter = ({ states, callbacks }) => {
-  // const data = [
-  //   {
-  //     gu: 'gu',
-  //     dong: 'dong',
-  //     price: 'price',
-  //   },
-  // ];
-
+  const [index, setIndex] = useState();
   const [gu, setGu] = useState();
   const [dong, setDong] = useState();
   const [price, setPrice] = useState();
+  const [id, setId] = useState();
 
   const guChange = (e) => {
     console.log(e);
@@ -35,20 +59,24 @@ const SurchargePresenter = ({ states, callbacks }) => {
     console.log(states.data);
   };
   const ADD = () => {
-    // data['gu'] = gu;
-    // data['dong'] = dong;
-    // data['price'] = price;
-    // data.push({
-    //   gu: gu,
-    //   dong: dong,
-    //   price: price,
-    // });
-    callbacks.add(gu, dong, price);
+    if (gu != undefined && dong != undefined && price != undefined) {
+      if (gu != '' && dong != '' && price != '') {
+        callbacks.add(states.data.length + 1, gu, dong, price);
+        console.log(states.data);
+      }
+    } else alert('항목 선택을 해주세요');
+    if (gu === '' && dong === '' && price === '') alert('항목 선택을 해주세요');
   };
   let listItem = states.data.map((e) => {
-    console.log(e);
-    if (e != undefined) {
-      return <SurchargeData props={e}></SurchargeData>;
+    console.log(e.gu);
+    if (e.gu != undefined && e.dong != undefined && e.price != undefined) {
+      return (
+        <SurchargeData
+          e={e}
+          states={states}
+          callbacks={callbacks}
+        ></SurchargeData>
+      );
     } else {
       return;
     }
@@ -73,33 +101,21 @@ const SurchargePresenter = ({ states, callbacks }) => {
       >
         <div style={{ marginTop: '5%', marginLeft: '7%' }}>
           <Input disabled placeholder="부산시" style={{ width: '90px' }} />
-          <Select
-            defaultValue="lucy"
-            style={{ width: 120 }}
-            onChange={guChange}
-          >
-            <Option value="lucy">구</Option>
+          <Select defaultValue="" style={{ width: 120 }} onChange={guChange}>
+            <Option value="">구</Option>
             <Option value="1">1</Option>
             <Option value="2">2</Option>
             <Option value="3">3</Option>
             <Option value="4">4</Option>
           </Select>
-          <Select
-            defaultValue="lucy"
-            style={{ width: 120 }}
-            onChange={dongChange}
-          >
-            <Option value="lucy">동</Option>
+          <Select defaultValue="" style={{ width: 120 }} onChange={dongChange}>
+            <Option value="">동</Option>
             <Option value="동1">동1</Option>
             <Option value="동2">동2</Option>
             <Option value="동3">동3</Option>
           </Select>
-          <Select
-            defaultValue="lucy"
-            style={{ width: 120 }}
-            onChange={addPrice}
-          >
-            <Option value="lucy">추가금액</Option>
+          <Select defaultValue="" style={{ width: 120 }} onChange={addPrice}>
+            <Option value="">추가금액</Option>
             <Option value="1000">1000</Option>
             <Option value="2000">2000</Option>
             <Option value="3000">3000</Option>
@@ -114,19 +130,31 @@ const SurchargePresenter = ({ states, callbacks }) => {
           height: '613px',
           float: 'right',
         }}
-      ></div>
+      >
+        {' '}
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination={{
+            pageSize: 3,
+          }}
+          size="small"
+        />
+      </div>
       <div
         style={{
           backgroundColor: '#ffffff',
           float: 'left',
           width: '600px',
           height: '350px',
+          overflow: 'auto',
+          marginTop: '3%',
         }}
       >
-        <List pagination="true">
-          {listItem}
-          <Button onClick={success}>선택완료</Button>
-        </List>
+        <List dataSource={listItem}>{listItem}</List>
+      </div>
+      <div style={{ backgroundColor: '#FFFFFF' }}>
+        <Button onClick={success}>선택완료</Button>
       </div>
     </div>
   );

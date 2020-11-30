@@ -106,9 +106,14 @@ const InsertPresenter = () => {
     setVisible(false);
   };
   const insertReason = () => {
+    console.log(resultReason);
     data[orderNo]['reason'] = resultReason;
-    alert('경고가 등록되었습니다');
-    setVisible(false);
+    if (reason === '사유 선택') {
+      alert('사유를 선택하세요');
+    } else {
+      alert('경고가 등록되었습니다');
+      setVisible(false);
+    }
   };
   function handleMenuClick(e) {
     console.log('click', e);
@@ -141,6 +146,7 @@ const InsertPresenter = () => {
   };
   const menu = (
     <Menu onClick={handleMenuClick}>
+      <Menu.Item key="사유선택">사유선택</Menu.Item>
       <Menu.Item key="1">배달늦음</Menu.Item>
       <Menu.Item key="2">오배달</Menu.Item>
       <Menu.Item key="3">직접입력</Menu.Item>
@@ -149,7 +155,7 @@ const InsertPresenter = () => {
 
   return (
     <>
-      <div style={{ paddingLeft: '' }}>
+      <div style={{ width: '80%', marginLeft: '3%', marginTop: '5%' }}>
         <Table
           style={{ height: '100%', width: '100%' }}
           columns={columns}
