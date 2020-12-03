@@ -120,12 +120,12 @@ const RiderManagePresenter = () => {
             marginBottom: '3%',
           }}
         >
-          <div>
+          <div style={{ marginLeft: '36%' }}>
             <Search
-              placeholder="input search text"
+              placeholder=""
               allowClear
               onSearch={onSearch}
-              style={{ width: 200, margin: '0 10px' }}
+              style={{ width: 200, margin: '0 10px', marginTop: '1%' }}
             />
           </div>
         </div>
@@ -190,7 +190,9 @@ const RiderManagePresenter = () => {
         </Row>
 
         <div style={{ float: 'left' }}>
-          <Checkbox onChange={onChange}>경고유무</Checkbox>
+          <Checkbox onChange={onChange} checked={false}>
+            경고유무
+          </Checkbox>
         </div>
         <div style={{ float: 'right' }}>
           <Form.Item label="점수">
@@ -203,6 +205,7 @@ const RiderManagePresenter = () => {
           </Form.Item>
         </div>
         <Table
+          bordered
           columns={Modalcolumns}
           dataSource={ModalcolumnsData}
           size="middle"

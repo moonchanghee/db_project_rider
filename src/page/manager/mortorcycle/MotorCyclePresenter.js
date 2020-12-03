@@ -79,14 +79,17 @@ const MotorCyclePresenter = () => {
             marginBottom: '3%',
           }}
         >
-          <div>
+          <div style={{ marginLeft: '32%' }}>
             <Search
-              placeholder="input search text"
+              placeholder=""
               allowClear
               onSearch={onSearch}
-              style={{ width: 200, margin: '0 10px' }}
+              // style={{ width: 200, margin: '0 10px' }}
+              style={{ width: 250, margin: '0 10px', marginTop: '1%' }}
             />
-            <Button onClick={Insert}>등록</Button>
+            <Button onClick={Insert} style={{ marginTop: '1%' }}>
+              등록
+            </Button>
           </div>
         </div>
         <div
