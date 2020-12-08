@@ -11,6 +11,7 @@ import {
   Modal,
   Button,
 } from 'antd';
+import Cookie from 'js-cookie';
 const { RangePicker } = DatePicker;
 const data = [
   {
@@ -82,6 +83,11 @@ const columns = [
   },
 ];
 
+const webSocket = new WebSocket('ws://192.168.64.94:8080/echo');
+webSocket.onopen = () => {
+  console.log('오픈');
+  // webSocket.send(`{JSESSIONID:${Cookie.get('JSESSIONID')}`);
+};
 const MainPresenter = () => {
   const [visible, setVisible] = useState(false);
   const { Option } = Select;
@@ -89,10 +95,9 @@ const MainPresenter = () => {
   const onSearch = (value) => console.log(value);
   const [type, setType] = useState('time');
   const [matchRider, setMatchRider] = useState(false);
-  // const webSocket = new WebSocket('ws://192.168.64.94:8080/echo');
+
   const [RiderData, setRiderData] = useState();
   const [orderNo, setOrderNo] = useState();
-  // webSocket.onopen = function () {};
   const PickerWithType = ({ type, onChange }) => {
     return <TimePicker onChange={onChange} />;
   };
@@ -119,7 +124,14 @@ const MainPresenter = () => {
   };
   return (
     <>
-      <div style={{ width: '80%', marginLeft: '3%', marginTop: '5%' }}>
+      <div
+        style={{
+          width: '80%',
+          marginLeft: '3%',
+          marginTop: '5%',
+          backgroundColor: '#ffffff',
+        }}
+      >
         <div style={{ paddingLeft: '30%' }}>
           <RangePicker
             style={{ marginRight: '1%' }}
@@ -143,22 +155,30 @@ const MainPresenter = () => {
           onRow={(val, index) => ({
             onClick: () => {
               // e.preventDefault();
-              // webSocket.send(val.key);
-              // webSocket.onmessage = function (event) {
+              webSocket.send(`${Cookie.get('JSESSIONID')}, ${val.orderNo}`);
+              // webSocket.send(
+              //   // `Authorization : ${Cookie.get('Authorization')}`
+              //   `order:${val.orderNo}`
+              // );
+
+              webSocket.onmessage = function (event) {
+                console.log(event.data);
+                setRiderData(event.data);
+              };
               // writeResponse(event.data);
               // console.log(event.data);
-              // setRiderData(event.data)
+              // setRiderData(event.data);
+              // console.log(val.orderNo);
               setOrderNo(index);
-              setRiderData('마스터');
+              // setRiderData('마스터');
               // console.log(val);
               // setRiderData('마스터');
-
               // };
               setMatchRider(true);
             },
           })}
         />
-        <Button onClick={onClickOrder}>주문요청</Button>
+        {/**<Button onClick={onClickOrder}>주문요청</Button>**/}
         {/**<Modal
           title="주문요청"
           visible={visible}
@@ -171,7 +191,7 @@ const MainPresenter = () => {
           <Button>거절</Button>
           <Button onClick={match}>수락</Button>
         </Modal>**/}
-        <Modal
+        {/** <Modal
           title="배달원 매칭"
           visible={matchRider}
           onOk={handleOk}
@@ -182,7 +202,20 @@ const MainPresenter = () => {
           <p>최근경고사유 : 배달물품 분실</p>
           <Button onClick={reject}>거절</Button>
           <Button onClick={Success}>수락</Button>
-        </Modal>
+        </Modal> */}
+        {matchRider ? (
+          <div style={{ visibility: 'visible' }}>
+            {' '}
+            <h1>배달원이 매칭되었습니다</h1>
+            {RiderData}
+            <p>배달원: 진현우 점수:90 등급:브론즈</p>
+            <p>최근경고사유 : 배달물품 분실</p>
+            <Button onClick={reject}>거절</Button>
+            <Button onClick={Success}>수락</Button>
+          </div>
+        ) : (
+          ''
+        )}
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Input,
   Button,
@@ -11,13 +11,17 @@ import {
   Space,
   Typography,
 } from 'antd';
+import Axios from 'axios';
 const { Text, Link } = Typography;
 const { Search } = Input;
 
-const RiderManagePresenter = () => {
+const RiderManagePresenter = ({ riderList }) => {
+  console.log(riderList);
   const [size, setSize] = useState(30);
   const [visible, setVisible] = useState(false);
   const [riderData, setRiderData] = useState([{}]);
+  const [riderDetailData, setRiderDetailData] = useState([{}]);
+  const [deliverer_cautionYn, setDeliverer_cautionYn] = useState(false);
   const onSearch = (value) => console.log(value);
   const handleOk = () => {
     setVisible(false);
@@ -26,35 +30,35 @@ const RiderManagePresenter = () => {
     setVisible(false);
   };
   const columns = [
-    {
-      title: 'No',
-      dataIndex: 'key',
-    },
+    // {
+    //   title: 'No',
+    //   dataIndex: 'key',
+    // },
     {
       title: '아이디',
-      dataIndex: 'id',
+      dataIndex: 'member_id',
     },
     {
       title: '이름',
-      dataIndex: 'name',
+      dataIndex: 'member_nm',
     },
     {
       title: '등급',
-      dataIndex: 'grade',
+      dataIndex: 'grade_nm',
     },
     {
       title: '등급 상승 예정 날짜',
-      dataIndex: 'upgrade',
+      dataIndex: 'deliverer_grade_updateAt',
     },
   ];
   const Modalcolumns = [
     {
       title: '벌점부여날짜',
-      dataIndex: 'date',
+      dataIndex: 'caution_createAt',
     },
     {
       title: '벌점 사유',
-      dataIndex: 'val',
+      dataIndex: 'caution_reason',
     },
   ];
   const ModalcolumnsData = [
@@ -140,13 +144,24 @@ const RiderManagePresenter = () => {
         >
           <Table
             columns={columns}
-            dataSource={data}
+            dataSource={riderList}
             size="middle"
             onRow={(e) => ({
               onClick: () => {
                 console.log(e);
+
                 setRiderData(e);
                 setVisible(true);
+                Axios.get(
+                  `http://192.168.64.94:8080/v1/deliverer/${e.member_id}`
+                ).then((e) => {
+                  setRiderDetailData(e.data.data);
+                  if (e.data.data.deliverer_cautionYn == 'N') {
+                    setDeliverer_cautionYn(false);
+                  } else if (e.data.data.deliverer_cautionYn == 'Y') {
+                    setDeliverer_cautionYn(true);
+                  }
+                });
               },
             })}
           />
@@ -161,53 +176,54 @@ const RiderManagePresenter = () => {
       >
         <Row gutter={[16, 24]}>
           <Col className="gutter-row" span={6}>
-            번호: <Text code>{riderData.key}</Text>
+            아이디: <Text code>{riderDetailData.member_id}</Text>
           </Col>
           <Col className="gutter-row" span={6}>
-            이름: <Text code>{riderData.name}</Text>
+            이름: <Text code>{riderDetailData.member_nm}</Text>
           </Col>
-          <Col className="gutter-row" span={6}>
-            나이: <Text code>{riderData.age}</Text>
-          </Col>
+          {/**<Col className="gutter-row" span={6}>
+            나이: <Text code>{riderDetailData.age}</Text>
+          </Col>**/}
           <Col className="gutter-row" span={6}>
             전화번호:
-            <Text code>{riderData.phoneNo}</Text>
+            <Text code>{riderDetailData.member_tel}</Text>
           </Col>
-          <Col className="gutter-row" span={6}>
-            주소:<Text code>{riderData.address}</Text>
-          </Col>
+          {/**<Col className="gutter-row" span={6}>
+            주소:<Text code>{riderDetailData.address}</Text>
+        </Col>**/}
           <Col className="gutter-row" span={6}>
             면허 번호:
-            <Text code>{riderData.riderNo}</Text>
+            <Text code>{riderDetailData.deliverer_licenseNum}</Text>
           </Col>
           <Col className="gutter-row" span={6}>
             면허 만료일:
-            <Text code>{riderData.endRiderNo}</Text>
+            <Text code>{riderDetailData.deliverer_licenseExp}</Text>
           </Col>
           <Col className="gutter-row" span={6}>
-            등급 상승 예정 일자: <Text code>{riderData.upgrade}</Text>
+            등급 상승 예정 일자:{' '}
+            <Text code>{riderDetailData.deliverer_grade_updateAt}</Text>
           </Col>
         </Row>
 
         <div style={{ float: 'left' }}>
-          <Checkbox onChange={onChange} checked={false}>
+          <Checkbox onChange={onChange} checked={deliverer_cautionYn}>
             경고유무
           </Checkbox>
         </div>
         <div style={{ float: 'right' }}>
           <Form.Item label="점수">
-            <Input />
+            <Input value={riderDetailData.deliverer_score} />
           </Form.Item>
         </div>
         <div style={{ float: 'right' }}>
           <Form.Item label="등급">
-            <Input value={riderData.grade} />
+            <Input value={riderDetailData.grade_nm} />
           </Form.Item>
         </div>
         <Table
           bordered
           columns={Modalcolumns}
-          dataSource={ModalcolumnsData}
+          dataSource={riderDetailData.caution_list}
           size="middle"
           scroll={{ y: 100 }}
         />

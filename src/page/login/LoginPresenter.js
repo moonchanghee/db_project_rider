@@ -8,7 +8,19 @@ const key = 'updatable';
 
 const LoginPresenter = ({ states, callbacks }) => {
   let history = useHistory();
+  const [userId, setUserId] = useState();
+  const [userPwd, setUserPwd] = useState();
   const [value, setValue] = useState(1);
+  const pwdChange = (e) => {
+    console.log(e);
+    setUserPwd(e.currentTarget.value);
+  };
+
+  const idChange = (e) => {
+    console.log(e);
+    setUserId(e.currentTarget.value);
+  };
+
   const onChange = (e) => {
     console.log(e.target.value);
     setValue(e.target.value);
@@ -18,25 +30,85 @@ const LoginPresenter = ({ states, callbacks }) => {
       callbacks.setStore(true);
     }
   };
+
   const gomain = async () => {
     message.loading({ content: 'Loading...', key });
-    setTimeout(() => {
-      {
-        states.store
-          ? message.success({ content: '점주 로그인 성공', key, duration: 2 })
-          : message.success({
-              content: '관리자 로그인 성공',
-              key,
-              duration: 2,
-            });
-      }
-    }, 100);
-    await history.push('/main');
+    const body = {
+      member_id: userId,
+      member_pw: userPwd,
+    };
+
+    if (states.store) {
+      // Axios.post('http://192.168.64.94:8080/v1/company/signIn', body).then(
+      //   (e) => {
+      //     if (e.success) {
+      setTimeout(() => {
+        message.success({
+          content: '점주 로그인 성공',
+          key,
+          duration: 2,
+        });
+        history.push('/main');
+      }, 400);
+      //   } else {
+      //     setTimeout(() => {
+      //       message.success({
+      //         content: '로그인 실패',
+      //         key,
+      //         duration: 3,
+      //       });
+      //     }, 400);
+      //   }
+      // }
+      // );
+    } else {
+      console.log('관리자 로그인');
+      setTimeout(() => {
+        message.success({
+          content: '관리자 로그인 성공',
+          key,
+          duration: 2,
+        });
+        history.push('/main/manager/status');
+      }, 400);
+    }
+
+    // {
+    // states.store;
+    // ? Axios.post('http://192.168.64.94:8080/v1/company/signIn', body).then(
+    //     (e) => console.log(e)
+    // setTimeout(() => {
+    //   message.success({ content: '점주 로그인 성공', key, duration: 2 })
+    // })
+    // )
+    // : '';
+    // }
+
+    // setTimeout(() => {
+    //   {
+    //     states.store
+    //       ? message.success({ content: '점주 로그인 성공', key, duration: 2 })
+    //       : message.success({
+    //           content: '관리자 로그인 성공',
+    //           key,
+    //           duration: 2,
+    //         });
+    //   }
+    // }, 100);
+
+    // {
+    //   states.store
+    //     ? history.push('/main')
+    //     : history.push('/main/manager/status');
+    // }
   };
 
   return (
     <div>
-      <Layout className="layout" style={{ height: '70%' }}>
+      <Layout
+        className="layout"
+        style={{ height: '70%', backgroundColor: '#ffffff' }}
+      >
         <Header>
           <div className="logo" />
         </Header>
@@ -72,7 +144,11 @@ const LoginPresenter = ({ states, callbacks }) => {
                 },
               ]}
             >
-              <Input style={{ marginLeft: '4%', width: '57%' }} />
+              <Input
+                style={{ marginLeft: '4%', width: '57%' }}
+                value={userId}
+                onChange={idChange}
+              />
             </Form.Item>
 
             <Form.Item
@@ -86,7 +162,11 @@ const LoginPresenter = ({ states, callbacks }) => {
                 },
               ]}
             >
-              <Input.Password style={{ width: '60%' }} />
+              <Input.Password
+                style={{ width: '60%' }}
+                value={userPwd}
+                onChange={pwdChange}
+              />
             </Form.Item>
             <Form.Item
               name="remember"

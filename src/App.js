@@ -18,7 +18,7 @@ const App = ({ states, callbacks }) => {
               <Header states={states} callbacks={callbacks}></Header>
             </Route>
           </Switch>
-          <Layout>
+          <Layout style={{ backgroundColor: '#ffffff' }}>
             <Switch>
               <Route path="/main">
                 <Sider states={states} callbacks={callbacks}></Sider>
@@ -34,17 +34,19 @@ const App = ({ states, callbacks }) => {
             <Switch>
               <Route exact path="/main" component={MainContainer}></Route>
             </Switch>
-            <Switch>
-              <Route
-                exact
-                path="/"
-                states={states}
-                callbacks={callbacks}
-                render={(props) => (
-                  <Login {...props} states={states} callbacks={callbacks} />
-                )}
-              ></Route>
-            </Switch>
+            {
+              <Switch>
+                <Route
+                  exact
+                  path="/"
+                  states={states}
+                  callbacks={callbacks}
+                  render={(props) => (
+                    <Login {...props} states={states} callbacks={callbacks} />
+                  )}
+                ></Route>
+              </Switch>
+            }
 
             <Switch>
               <Route
@@ -73,7 +75,9 @@ const App = ({ states, callbacks }) => {
               />
             </Switch>
           </Layout>
-          <Footer style={{ textAlign: 'center' }}>dbrider</Footer>
+          <Footer style={{ textAlign: 'center' }}>
+            2020 db_project_deliverer
+          </Footer>
         </BrowserRouter>
       </Layout>
     </>

@@ -12,7 +12,7 @@ const SiderPresenter = (props) => {
         <Sider>
           <div className="logo" />
           <Menu
-            theme="light"
+            theme="dark"
             defaultSelectedKeys={['1']}
             mode="inline"
             style={{ minHeight: '100vh' }}
@@ -32,7 +32,7 @@ const SiderPresenter = (props) => {
         <Sider>
           <div className="logo" />
           <Menu
-            theme="light"
+            theme="dark"
             defaultSelectedKeys={['1']}
             mode="inline"
             style={{ minHeight: '100vh' }}

@@ -1,23 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Axios from 'axios';
 import { Table, List } from 'antd';
 const columns = [
   {
-    title: 'Name',
-    dataIndex: 'name',
+    title: '아이디',
+    dataIndex: 'member_id',
     width: 150,
   },
   {
-    title: 'Age',
-    dataIndex: 'age',
+    title: '이름',
+    dataIndex: 'member_nm',
     width: 150,
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
+    title: '가입날짜',
+    dataIndex: 'member_createAt',
   },
 ];
 
-const RiderStatusPresenter = () => {
+const RiderStatusPresenter = ({ recentRider, gradeList }) => {
+  console.log(recentRider);
+  console.log(gradeList);
+  const [masterCnt, setMasterCnt] = useState();
+  const [diaCnt, setDiaCnt] = useState();
+  const [platinumCnt, setPlatinumCnt] = useState();
+  const [goldCnt, setGoldCnt] = useState();
+  const [silverCnt, setSilverCnt] = useState();
+  const [bronzeCnt, setBronzeCnt] = useState();
+
+  useEffect(() => {}, []);
   const data = [];
   const data1 = [
     { rank: '마스터', val: 33 },
@@ -50,7 +61,7 @@ const RiderStatusPresenter = () => {
           <h1 style={{ textAlign: 'center' }}>최근 1주 신규 배달원</h1>
           <Table
             columns={columns}
-            dataSource={data}
+            dataSource={recentRider}
             pagination={{ pageSize: 50 }}
             scroll={{ y: 240 }}
           />
@@ -74,11 +85,11 @@ const RiderStatusPresenter = () => {
             }}
             size="small"
             bordered
-            dataSource={data1}
+            dataSource={gradeList}
             renderItem={(item) => (
               <List.Item>
-                <h1>{item.rank}</h1>
-                <p>{item.val}명</p>
+                <h1>{item.grade_nm}</h1>
+                <p>{item.grade_cnt}명</p>
               </List.Item>
             )}
           />

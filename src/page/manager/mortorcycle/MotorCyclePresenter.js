@@ -6,23 +6,23 @@ const { Text, Link } = Typography;
 const columns = [
   {
     title: '운용오토바이 번호',
-    dataIndex: 'No',
+    dataIndex: 'motorcycle_seq',
   },
   {
     title: '배달원 이름',
-    dataIndex: 'name',
+    dataIndex: 'member_nm',
   },
   {
     title: '소유',
-    dataIndex: 'own',
+    dataIndex: 'motorcycle_owner',
   },
   {
     title: '대여일자',
-    dataIndex: 'starAt',
+    dataIndex: 'motorcycle_rentStart',
   },
   {
     title: '대여 종료일자',
-    dataIndex: 'EndAt',
+    dataIndex: 'motorcycle_rentEnd',
   },
 ];
 const data = [
@@ -51,7 +51,8 @@ const data = [
     EndAt: '10.25',
   },
 ];
-const MotorCyclePresenter = () => {
+const MotorCyclePresenter = ({ motorcycleData }) => {
+  console.log(motorcycleData);
   const onSearch = (value) => console.log(value);
   const [insertVisible, setInsertVisible] = useState(false);
   const [cycleMadalData, setCycleMadalData] = useState(false);

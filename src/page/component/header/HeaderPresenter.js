@@ -13,6 +13,7 @@ const HeaderPresenter = (props) => {
   };
   const logout = () => {
     console.log('logout');
+    history.push('/');
   };
   console.log(props);
   return (
@@ -49,7 +50,6 @@ const HeaderPresenter = (props) => {
             관리자입니다
             <Button onClick={logout}>로그아웃</Button>
           </div>
-
           <Menu
             style={{ marginLeft: '90%', width: ' 20px' }}
             theme="dark"

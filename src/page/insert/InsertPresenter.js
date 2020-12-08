@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import io from 'socket.io-client';
 import {
   Table,
   Checkbox,
@@ -11,19 +12,11 @@ import {
   Col,
   Input,
 } from 'antd';
+import Axios from 'axios';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 const { TabPane } = Tabs;
 const { TextArea } = Input;
-
-// const data = [];
-// for (let i = 0; i < 100; i++) {
-//   data.push({
-//     key: i,
-//     name: `Edrward ${i}`,
-//     age: 32,
-//     address: `London Park no. ${i}`,
-//   });
-// }
+// const socket = io.connect('http://192.168.64.94:8080');
 const data = [
   {
     orderNo: '1',
@@ -46,11 +39,31 @@ const data = [
 ];
 
 const InsertPresenter = () => {
+  const webSocket = new WebSocket('ws://192.168.64.94:8080/echo');
+  const [messageList, setMessageList] = useState([]);
+  const [name, setName] = useState('');
+  const [value, setValue] = useState('');
+  useEffect(() => {
+    //   socket.on('receive message', (message) => {
+    //     console.log(message);
+    //     setMessageList((messageList) => messageList.concat(message));
+    //   });
+  }, []);
+
   const [inputReason, setInputReason] = useState(false);
   const [reason, setReason] = useState('사유 선택');
   const [resultReason, setResultReason] = useState();
   const [area, setArea] = useState();
   const [orderNo, setOrderNo] = useState();
+  const [orderSccData, setOrderSccData] = useState([{}]);
+  useEffect(() => {
+    Axios.get('http://192.168.64.94:8080/v1/company/order/endlist').then(
+      (e) => {
+        setOrderSccData(e.data);
+      }
+    );
+  }, []);
+
   const columns = [
     {
       title: '주문번호',
@@ -107,10 +120,22 @@ const InsertPresenter = () => {
   };
   const insertReason = () => {
     console.log(resultReason);
+
+    const body = {
+      delivery_seq: '1',
+      caution_entry_seq: '1',
+      caution_reason: '배달원이 약속시간 보다 2시간 늦게왔어요',
+    };
+
     data[orderNo]['reason'] = resultReason;
     if (reason === '사유 선택') {
       alert('사유를 선택하세요');
     } else {
+      Axios.post('http://192.168.64.94:8080/v1/company/caution', body).then(
+        () => {
+          console.log();
+        }
+      );
       alert('경고가 등록되었습니다');
       setVisible(false);
     }
@@ -136,9 +161,16 @@ const InsertPresenter = () => {
     console.log(`checked = ${e.target.checked}`);
     console.log(e);
     if (e.target.checked) {
+      // webSocket.onopen = function () {
+      //   alert('[open] 커넥션이 만들어졌습니다.');
+      //   alert('데이터를 서버에 전송해봅시다.');
+      // };
+      console.log(orderNo);
+      webSocket.send('My name is John');
       setVisible(true);
     }
   };
+  ////////////////////////////////////////////////////////////
   console.log(area);
   const onChangeReason = (e) => {
     setArea(e.currentTarget.value);
