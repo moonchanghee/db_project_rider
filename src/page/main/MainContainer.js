@@ -45,7 +45,7 @@ import io from 'socket.io-client';
 // function writeResponse(text) {
 //   messages.innerHTML += '<br/>' + text;
 // }
-const MainContainer = () => {
+const MainContainer = ({ states, callbacks }) => {
   // const webSocket = new WebSocket('ws://192.168.64.94:8080/echo');
   // const [messageList, setMessageList] = useState([]);
   // const [name, setName] = useState('');
@@ -66,7 +66,7 @@ const MainContainer = () => {
   //   webSocket.send('My name is John');
   // };
   //////////////////////////////////////////////////////////
-  return <MainPresenter></MainPresenter>;
+  return <MainPresenter states={states} callbacks={callbacks}></MainPresenter>;
   // return (
 
   //   <div className="App">

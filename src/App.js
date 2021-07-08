@@ -20,9 +20,15 @@ const App = ({ states, callbacks }) => {
           </Switch>
           <Layout style={{ backgroundColor: '#ffffff' }}>
             <Switch>
-              <Route path="/main">
+              {/**          <Route path="/main">
                 <Sider states={states} callbacks={callbacks}></Sider>
-              </Route>
+              </Route>*/}
+              <Route
+                path="/main"
+                render={(props) => (
+                  <Sider {...props} states={states} callbacks={callbacks} />
+                )}
+              />
             </Switch>
             <Switch>
               <Route
@@ -31,9 +37,20 @@ const App = ({ states, callbacks }) => {
                 component={Riderstatus}
               ></Route>
             </Switch>
-            <Switch>
+            {/**<Switch>
               <Route exact path="/main" component={MainContainer}></Route>
-            </Switch>
+            </Switch>**/}
+            <Route
+              exact
+              path="/main"
+              render={(props) => (
+                <MainContainer
+                  {...props}
+                  states={states}
+                  callbacks={callbacks}
+                />
+              )}
+            />
             {
               <Switch>
                 <Route
@@ -47,7 +64,6 @@ const App = ({ states, callbacks }) => {
                 ></Route>
               </Switch>
             }
-
             <Switch>
               <Route
                 exact
@@ -63,7 +79,14 @@ const App = ({ states, callbacks }) => {
               ></Route>
             </Switch>
             <Switch>
-              <Route exact path="/main/insert" component={Insert} />
+              {/**<Route exact path="/main/insert" component={Insert} />**/}
+              <Route
+                exact
+                path="/main/insert"
+                render={(props) => (
+                  <Insert {...props} states={states} callbacks={callbacks} />
+                )}
+              />
             </Switch>
             <Switch>
               <Route

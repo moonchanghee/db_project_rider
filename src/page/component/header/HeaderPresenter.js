@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { Layout, Menu, Button } from 'antd';
+import { Layout, Menu, Button, message } from 'antd';
 const { Header } = Layout;
 const HeaderPresenter = (props) => {
-  // const [store, setStore] = useState(true);
+  const key = 'updatable';
   let history = useHistory();
   const goMain = () => {
-    history.push('/main');
+    console.log('dd');
   };
   const goMain2 = () => {
-    history.push('/main/manager/status');
+    console.log('dd');
   };
   const logout = () => {
-    console.log('logout');
-    history.push('/');
+    message.loading({ content: 'Loading...', key });
+    props.props.states.webSocket.close();
+    setTimeout(() => {
+      message.success({
+        content: '로그아웃 완료',
+        key,
+        duration: 3,
+      });
+      history.push('/');
+    }, 400);
   };
   console.log(props);
   return (
@@ -23,17 +31,18 @@ const HeaderPresenter = (props) => {
           <p
             style={{
               color: '#FFFFFF',
-              width: '5%',
             }}
             onClick={() => {
               goMain();
             }}
           >
             매장입니다
+            <Button onClick={logout} style={{ marginLeft: '80%' }}>
+              로그아웃
+            </Button>
           </p>
-          <Button onClick={logout}>로그아웃</Button>
           <Menu
-            style={{ marginLeft: '90%', width: ' 20px' }}
+            style={{ marginLeft: '90px', width: ' 20px' }}
             theme="dark"
             mode="horizontal"
             defaultSelectedKeys={['2']}
@@ -42,13 +51,15 @@ const HeaderPresenter = (props) => {
       ) : (
         <Header>
           <div
-            style={{ color: '#FFFFFF', width: '6%' }}
+            style={{ color: '#FFFFFF' }}
             onClick={() => {
               goMain2();
             }}
           >
             관리자입니다
-            <Button onClick={logout}>로그아웃</Button>
+            <Button onClick={logout} style={{ marginLeft: '80%' }}>
+              로그아웃
+            </Button>
           </div>
           <Menu
             style={{ marginLeft: '90%', width: ' 20px' }}

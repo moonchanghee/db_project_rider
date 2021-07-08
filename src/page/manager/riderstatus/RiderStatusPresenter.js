@@ -29,27 +29,32 @@ const RiderStatusPresenter = ({ recentRider, gradeList }) => {
   const [bronzeCnt, setBronzeCnt] = useState();
 
   useEffect(() => {}, []);
-  const data = [];
-  const data1 = [
-    { rank: '마스터', val: 33 },
-    { rank: '다이아', val: 33 },
-    { rank: '플래티넘', val: 33 },
-    { rank: '골드', val: 33 },
-    { rank: '실버', val: 33 },
-    { rank: '브론즈', val: 33 },
+  const data = [
+    { member_id: '20131234 ', member_nm: '김민석', member_createAt: '12.07' },
+    { member_id: '20150000 ', member_nm: '강정무', member_createAt: '12.09' },
+    { member_id: '20150001 ', member_nm: '문창희', member_createAt: '12.09' },
+    { member_id: '20150002 ', member_nm: '박준혁', member_createAt: '12.10' },
+    { member_id: '20151252 ', member_nm: '이균환', member_createAt: '12.10' },
   ];
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: i,
-      name: `Edward King ${i}`,
-      age: 32,
-      address: `London, Park Lane no. ${i}`,
-    });
-  }
+  const data1 = [
+    { grade_nm: '마스터', grade_cnt: 1 },
+    { grade_nm: '다이아', grade_cnt: 2 },
+    { grade_nm: '플래티넘', grade_cnt: 4 },
+    { grade_nm: '골드', grade_cnt: 6 },
+    { grade_nm: '실버', grade_cnt: 9 },
+    { grade_nm: '브론즈', grade_cnt: 10 },
+  ];
+  // for (let i = 0; i < 100; i++) {
+  //   data.push({
+  //     key: i,
+  //     name: `Edward King ${i}`,
+  //     age: 32,
+  //     address: `London, Park Lane no. ${i}`,
+  //   });
+  // }
   return (
     <>
-      <p>라이더 현황</p>
-      <div style={{ marginTop: '5%' }}>
+      <div style={{ marginTop: '5%', marginLeft: '6%' }}>
         <div
           style={{
             backgroundColor: '#ffffff',
@@ -61,7 +66,8 @@ const RiderStatusPresenter = ({ recentRider, gradeList }) => {
           <h1 style={{ textAlign: 'center' }}>최근 1주 신규 배달원</h1>
           <Table
             columns={columns}
-            dataSource={recentRider}
+            // dataSource={recentRider}
+            dataSource={data}
             pagination={{ pageSize: 50 }}
             scroll={{ y: 240 }}
           />
@@ -85,7 +91,8 @@ const RiderStatusPresenter = ({ recentRider, gradeList }) => {
             }}
             size="small"
             bordered
-            dataSource={gradeList}
+            // dataSource={gradeList}
+            dataSource={data1}
             renderItem={(item) => (
               <List.Item>
                 <h1>{item.grade_nm}</h1>

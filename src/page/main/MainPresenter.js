@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   DatePicker,
   Space,
@@ -10,34 +10,100 @@ import {
   Tag,
   Modal,
   Button,
+  Divider,
+  message,
 } from 'antd';
 import Cookie from 'js-cookie';
+import Axios from 'axios';
 const { RangePicker } = DatePicker;
 const data = [
+  // {
+  //   orderNo: 1,
+  //   time: '2020-12-04 15:43:28',
+  //   method: '카드',
+  //   price: '22000',
+  //   menu: '동서 후라이드 외 1',
+  //   grade: '',
+  //   state: '배달대기',
+  // },
+  // {
+  //   orderNo: 2,
+  //   time: '2020-12-04 20:40:56',
+  //   method: '카드',
+  //   price: '23000',
+  //   menu: '동서 양념 외 1 ',
+  //   grade: '',
+  //   state: '배달대기',
+  // },
+  // {
+  //   orderNo: 3,
+  //   time: '2020-12-04 20:40:56',
+  //   method: '카드',
+  //   price: '32000',
+  //   menu: '불고기 피자 외 3',
+  //   grade: '',
+  //   state: '배달대기',
+  // },
+  // {
+  //   orderNo: 4,
+  //   time: '2020-12-04 21:27:05',
+  //   method: '카드',
+  //   price: '30000',
+  //   menu: '포테이토 피자 외 2',
+  //   grade: '',
+  //   state: '배달대기',
+  // },
   {
-    orderNo: 1,
-    time: '11:23',
+    orderNo: 5,
+    time: '2020-12-04 21:28:11',
     method: '카드',
-    price: '12,000',
-    menu: '치킨',
+    price: '28000',
+    menu: '동서 슈프림 치킨 외 2',
     grade: '',
     state: '배달대기',
   },
   {
-    orderNo: 2,
-    time: '13:23',
+    orderNo: 6,
+    time: '2020-12-04 21:30:04',
     method: '카드',
-    price: '12,000',
-    menu: '피자',
+    price: '28000   ',
+    menu: '콤비네이션 피자 외 1',
     grade: '',
     state: '배달대기',
   },
   {
-    orderNo: 3,
-    time: '13:23',
-    method: '현금',
-    price: '22,000',
-    menu: '밥',
+    orderNo: 7,
+    time: '2020-12-04 21:30:50',
+    method: '카드',
+    price: '29000   ',
+    menu: '동서 후라이드 외 2',
+    grade: '',
+    state: '배달대기',
+  },
+  {
+    orderNo: 8,
+    time: '2020-12-04 21:33:06',
+    method: '카드',
+    price: '33000   ',
+    menu: '나폴리 피자 외 4 ',
+    grade: '',
+    state: '배달대기',
+  },
+  {
+    orderNo: 9,
+    time: '2020-12-04 21:36:45',
+    method: '카드',
+    price: '38000   ',
+    menu: '탕수육 외 4',
+    grade: '',
+    state: '배달대기',
+  },
+  {
+    orderNo: 10,
+    time: '2020-12-04 21:36:47',
+    method: '카드',
+    price: '42000',
+    menu: '팔보채',
     grade: '',
     state: '배달대기',
   },
@@ -48,7 +114,6 @@ const columns = [
     title: '주문번호',
     dataIndex: 'orderNo',
     key: 'orderNo',
-    // render: (text) => <a>{text}</a>,
   },
   {
     title: '주문시간',
@@ -57,7 +122,7 @@ const columns = [
   },
 
   {
-    title: '결제유무',
+    title: '결제방식',
     dataIndex: 'method',
     key: 'method',
   },
@@ -82,51 +147,69 @@ const columns = [
     key: 'state',
   },
 ];
+var arr = [];
 
-const webSocket = new WebSocket('ws://192.168.64.94:8080/echo');
-webSocket.onopen = () => {
-  console.log('오픈');
-  // webSocket.send(`{JSESSIONID:${Cookie.get('JSESSIONID')}`);
-};
-const MainPresenter = () => {
+const MainPresenter = ({ states, callbacks }) => {
+  const [updata, setupdata] = useState([{}]);
+  useEffect(() => {
+    Axios.get('http://192.168.64.94:8080/v1/company/order/list', {
+      headers: {
+        Authorization: states.session,
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+    }).then((e) => {
+      console.log(e.data.data);
+      setupdata(e.data.data);
+    });
+  }, []);
+  states.webSocket.onopen = () => {
+    console.log('오픈');
+    states.webSocket.onmessage = function (event) {
+      console.log(event.data);
+    };
+  };
+
   const [visible, setVisible] = useState(false);
   const { Option } = Select;
   const { Search } = Input;
   const onSearch = (value) => console.log(value);
   const [type, setType] = useState('time');
   const [matchRider, setMatchRider] = useState(false);
-
   const [RiderData, setRiderData] = useState();
   const [orderNo, setOrderNo] = useState();
+  const [sibal, setsibal] = useState();
   const PickerWithType = ({ type, onChange }) => {
     return <TimePicker onChange={onChange} />;
   };
-  const handleOk = () => {
-    setVisible(false);
-    setMatchRider(false);
-  };
-  const handleCancel = () => {
-    setVisible(false);
-    setMatchRider(false);
-  };
-  const onClickOrder = () => {
-    setVisible(true);
-  };
-  const match = () => {
-    setMatchRider(true);
-  };
+  const key = 'updatable';
+
   const reject = () => {
+    arr = [];
     console.log('거절되었습니다');
+    setMatchRider(false);
+    console.log(arr[0]);
   };
   const Success = () => {
-    data[orderNo]['grade'] = RiderData;
+    states.webSocket.send(`${states.session},${sibal},${arr[0]}`);
+    data[sibal - 5]['grade'] = RiderData;
+    data[sibal - 5]['state'] = '배달중';
+    const body = {
+      deliverer_id: arr[0],
+      order_seq: sibal,
+    };
+    console.log(sibal);
+    Axios.post(
+      'http://192.168.64.94:8080/v1/company/order/match',
+      body
+    ).then((e) => console.log(e));
     setMatchRider(false);
+    arr = [];
   };
   return (
     <>
       <div
         style={{
-          width: '80%',
+          width: '1500px',
           marginLeft: '3%',
           marginTop: '5%',
           backgroundColor: '#ffffff',
@@ -142,76 +225,71 @@ const MainPresenter = () => {
             onChange={(value) => console.log(value)}
           />
           <Search
-            placeholder="input search text"
+            placeholder=""
             allowClear
             onSearch={onSearch}
-            style={{ width: 300, marginLeft: '9%' }}
+            style={{ width: '250px', marginLeft: '150px' }}
           />
         </div>
         <Table
           columns={columns}
           dataSource={data}
-          // scroll={{ x: 500, y: 1000 }}
+          // dataSource={updata}
+          pagination={{ pageSize: 3 }}
           onRow={(val, index) => ({
             onClick: () => {
-              // e.preventDefault();
-              webSocket.send(`${Cookie.get('JSESSIONID')}, ${val.orderNo}`);
-              // webSocket.send(
-              //   // `Authorization : ${Cookie.get('Authorization')}`
-              //   `order:${val.orderNo}`
-              // );
-
-              webSocket.onmessage = function (event) {
-                console.log(event.data);
-                setRiderData(event.data);
+              console.log(val);
+              console.log(val.orderNo);
+              setsibal(val.orderNo);
+              states.webSocket.send(`${states.session}, ${val.orderNo}`);
+              message.loading({ content: '요청중..', key });
+              states.webSocket.onmessage = function (event) {
+                console.log(event);
+                arr.push(event.data);
+                console.log(arr);
+                console.log(arr.length);
+                if (arr.length === 5) {
+                  setTimeout(() => {
+                    message.success({
+                      content: '요청완료',
+                      key,
+                      duration: 3,
+                    });
+                    setMatchRider(true);
+                  });
+                }
+                setRiderData(arr[2]);
               };
-              // writeResponse(event.data);
-              // console.log(event.data);
-              // setRiderData(event.data);
-              // console.log(val.orderNo);
               setOrderNo(index);
-              // setRiderData('마스터');
-              // console.log(val);
-              // setRiderData('마스터');
-              // };
-              setMatchRider(true);
             },
           })}
         />
-        {/**<Button onClick={onClickOrder}>주문요청</Button>**/}
-        {/**<Modal
-          title="주문요청"
-          visible={visible}
-          onOk={handleOk}
-          onCancel={handleCancel}
-        >
-          <h1>주문요청이 들어왔습니다</h1>
-          <p>배달음식: 치피세트 주문총액 : 12,000</p>
-          <p>배달지역: 사상구 엄궁동 할증정보:0</p>
-          <Button>거절</Button>
-          <Button onClick={match}>수락</Button>
-        </Modal>**/}
-        {/** <Modal
-          title="배달원 매칭"
-          visible={matchRider}
-          onOk={handleOk}
-          onCancel={handleCancel}
-        >
-          <h1>배달원이 매칭되었습니다</h1>
-          <p>배달원: 진현우 점수:90 등급:브론즈</p>
-          <p>최근경고사유 : 배달물품 분실</p>
-          <Button onClick={reject}>거절</Button>
-          <Button onClick={Success}>수락</Button>
-        </Modal> */}
+
         {matchRider ? (
-          <div style={{ visibility: 'visible' }}>
+          <div
+            style={{
+              width: '400px',
+              height: '260px',
+              visibility: 'visible',
+              marginLeft: '30%',
+              backgroundColor: '#E6E6E6',
+              textAlign: 'center',
+              border: 'solid',
+            }}
+          >
             {' '}
             <h1>배달원이 매칭되었습니다</h1>
-            {RiderData}
-            <p>배달원: 진현우 점수:90 등급:브론즈</p>
-            <p>최근경고사유 : 배달물품 분실</p>
+            <Divider />
+            <p>
+              배달원: {arr[1]} 점수: {arr[3]} 등급: {arr[2]}
+            </p>
+            <Divider />
+            <p>최근경고사유 : {arr[4]}</p>
+            <Divider />
             <Button onClick={reject}>거절</Button>
-            <Button onClick={Success}>수락</Button>
+            <Button onClick={Success} style={{ marginLeft: '5%' }}>
+              수락
+            </Button>
           </div>
         ) : (
           ''

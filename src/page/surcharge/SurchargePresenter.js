@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import SurchargeData from './SurchargeData';
-import { Select, Input, Button, List, Typography, Table } from 'antd';
-
+import { Select, Input, Button, List, Table, Typography } from 'antd';
+const { Title } = Typography;
 const { Option } = Select;
 const columns = [
   {
@@ -85,12 +85,18 @@ const SurchargePresenter = ({ states, callbacks }) => {
     <div>
       <div
         style={{
-          backgroundColor: '#21610B',
-          width: '260%',
+          backgroundColor: '#F2F2F2',
+          // width: '260px',
           height: '50px',
           marginBottom: '3%',
+          textAlign: 'center',
+          position: 'center',
         }}
-      ></div>
+      >
+        <Title level={2}>
+          매장 위치: 부산시 사상구 주례동 동서 치킨 1호점 동서 치킨
+        </Title>
+      </div>
       <div
         style={{
           backgroundColor: '#ffffff',
@@ -103,22 +109,24 @@ const SurchargePresenter = ({ states, callbacks }) => {
           <Input disabled placeholder="부산시" style={{ width: '90px' }} />
           <Select defaultValue="" style={{ width: 120 }} onChange={guChange}>
             <Option value="">구</Option>
-            <Option value="1">1</Option>
-            <Option value="2">2</Option>
-            <Option value="3">3</Option>
-            <Option value="4">4</Option>
+            <Option value="강서구">강서구</Option>
+            <Option value="사상구">사상구</Option>
+            <Option value="금정구">금정구</Option>
+            <Option value="남구">남구</Option>
+            <Option value="동래구">동래구</Option>
           </Select>
           <Select defaultValue="" style={{ width: 120 }} onChange={dongChange}>
             <Option value="">동</Option>
-            <Option value="동1">동1</Option>
-            <Option value="동2">동2</Option>
-            <Option value="동3">동3</Option>
+            <Option value="감전동">감전동</Option>
+            <Option value="주례동">주례동</Option>
+            <Option value="개금동">개금동</Option>
+            <Option value="삼락동">삼락동</Option>
           </Select>
           <Select defaultValue="" style={{ width: 120 }} onChange={addPrice}>
             <Option value="">추가금액</Option>
             <Option value="1000">1000</Option>
             <Option value="2000">2000</Option>
-            <Option value="3000">3000</Option>
+            <Option value="3000">2500</Option>
           </Select>
           <Button onClick={ADD}>추가</Button>
         </div>
@@ -143,17 +151,20 @@ const SurchargePresenter = ({ states, callbacks }) => {
       </div>
       <div
         style={{
+          pagination: true,
           backgroundColor: '#ffffff',
           float: 'left',
-          width: '600px',
+          width: '610px',
           height: '350px',
-          overflow: 'auto',
+          // overflow-x: '',
+          overflowX: 'hidden',
+          overflowY: 'auto',
           marginTop: '3%',
         }}
       >
         <List dataSource={listItem}>{listItem}</List>
       </div>
-      <div style={{ backgroundColor: '#FFFFFF' }}>
+      <div style={{ backgroundColor: '#FFFFFF', marginLeft: '21%' }}>
         <Button onClick={success}>선택완료</Button>
       </div>
     </div>

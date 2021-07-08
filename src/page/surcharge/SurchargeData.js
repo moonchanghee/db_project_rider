@@ -1,22 +1,36 @@
 import React from 'react';
-import { List, Button, Divider } from 'antd';
+import { List, Button, Divider, Row, Col } from 'antd';
 const SurchargeData = (props) => {
+  const style = { padding: '8px 0' };
   console.log(props.e.id);
   console.log(props.callbacks.deleteItem);
   return (
     <div>
       {
         <List.Item style={{ margin: 'auto' }}>
-          부산시
-          {props.e.gu}
-          {props.e.dong}
-          {props.e.price}
-          <Button
-            style={{ float: 'right' }}
-            onClick={() => props.callbacks.deleteItem(props.e.id)}
-          >
-            삭제
-          </Button>
+          {''}
+          <Row gutter={16}>
+            <Col className="gutter-row" span={6}>
+              <div style={style}>부산광역시</div>
+            </Col>
+            <Col className="gutter-row" span={6}>
+              <div style={style}>{props.e.gu}</div>
+            </Col>
+            <Col className="gutter-row" span={6}>
+              <div style={style}>{props.e.dong}</div>
+            </Col>
+            <Col className="gutter-row" span={6}>
+              <div style={style}>
+                {props.e.price}{' '}
+                <Button
+                  style={{ float: 'right' }}
+                  onClick={() => props.callbacks.deleteItem(props.e.id)}
+                >
+                  삭제
+                </Button>
+              </div>
+            </Col>
+          </Row>
           <Divider />
         </List.Item>
       }

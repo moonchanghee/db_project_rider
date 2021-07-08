@@ -3,7 +3,8 @@ import Axios from 'axios';
 import { Link, useHistory } from 'react-router-dom';
 import { Layout, Form, Input, Button, Radio, message } from 'antd';
 import './login.css';
-const { Header, Content, Footer } = Layout;
+import Cookie from 'js-cookie';
+const { Header, Content } = Layout;
 const key = 'updatable';
 
 const LoginPresenter = ({ states, callbacks }) => {
@@ -39,9 +40,11 @@ const LoginPresenter = ({ states, callbacks }) => {
     };
 
     if (states.store) {
-      // Axios.post('http://192.168.64.94:8080/v1/company/signIn', body).then(
-      //   (e) => {
-      //     if (e.success) {
+      // Axios.post('http://192.168.64.94:8080/v1/auth/shop', body).then((e) => {
+      // if (e.data.msg) {
+      // console.log(e);
+      // Cookie.set('JSESSIONID', e.data.data.Authorization);
+      callbacks.setsession(Cookie.get('JSESSIONID'));
       setTimeout(() => {
         message.success({
           content: '점주 로그인 성공',
@@ -50,18 +53,19 @@ const LoginPresenter = ({ states, callbacks }) => {
         });
         history.push('/main');
       }, 400);
-      //   } else {
-      //     setTimeout(() => {
-      //       message.success({
-      //         content: '로그인 실패',
-      //         key,
-      //         duration: 3,
-      //       });
-      //     }, 400);
-      //   }
       // }
-      // );
-    } else {
+      // else {
+      setTimeout(() => {
+        message.success({
+          content: '로그인 실패',
+          key,
+          duration: 3,
+        });
+      }, 400);
+    }
+    // });
+    // }
+    else {
       console.log('관리자 로그인');
       setTimeout(() => {
         message.success({
@@ -72,35 +76,6 @@ const LoginPresenter = ({ states, callbacks }) => {
         history.push('/main/manager/status');
       }, 400);
     }
-
-    // {
-    // states.store;
-    // ? Axios.post('http://192.168.64.94:8080/v1/company/signIn', body).then(
-    //     (e) => console.log(e)
-    // setTimeout(() => {
-    //   message.success({ content: '점주 로그인 성공', key, duration: 2 })
-    // })
-    // )
-    // : '';
-    // }
-
-    // setTimeout(() => {
-    //   {
-    //     states.store
-    //       ? message.success({ content: '점주 로그인 성공', key, duration: 2 })
-    //       : message.success({
-    //           content: '관리자 로그인 성공',
-    //           key,
-    //           duration: 2,
-    //         });
-    //   }
-    // }, 100);
-
-    // {
-    //   states.store
-    //     ? history.push('/main')
-    //     : history.push('/main/manager/status');
-    // }
   };
 
   return (
@@ -115,9 +90,8 @@ const LoginPresenter = ({ states, callbacks }) => {
         <Content style={{ padding: '0 50px' }}>
           <div
             style={{
-              marginTop: '10%',
               margin: 'auto',
-              width: '40%',
+              width: '650px',
               height: '70%',
               backgroundColor: '#ffffff',
             }}
@@ -127,7 +101,7 @@ const LoginPresenter = ({ states, callbacks }) => {
               <h1
                 style={{
                   fontSize: '30px',
-                  marginLeft: '30%',
+                  marginLeft: '180px',
                 }}
               >
                 로그인 페이지
@@ -173,7 +147,6 @@ const LoginPresenter = ({ states, callbacks }) => {
               valuePropName="checked"
               style={{ marginLeft: '39%' }}
             >
-              {/**<Checkbox>Remember me</Checkbox>**/}
               <Radio.Group onChange={onChange} value={value}>
                 <Radio value={1}>관리자</Radio>
                 <Radio value={2}>점주</Radio>

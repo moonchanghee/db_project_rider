@@ -22,6 +22,7 @@ const RiderManagePresenter = ({ riderList }) => {
   const [riderData, setRiderData] = useState([{}]);
   const [riderDetailData, setRiderDetailData] = useState([{}]);
   const [deliverer_cautionYn, setDeliverer_cautionYn] = useState(false);
+  const [exyn, setExyn] = useState(false);
   const onSearch = (value) => console.log(value);
   const handleOk = () => {
     setVisible(false);
@@ -63,50 +64,80 @@ const RiderManagePresenter = ({ riderList }) => {
   ];
   const ModalcolumnsData = [
     {
-      date: '11.20',
-      val: 'dddddddddd',
+      caution_createAt: '11.20',
+      caution_reason: '2시간이나 늦었어요',
     },
     {
-      date: '11.20',
-      val: 'dddddddddd',
+      caution_createAt: '11.20',
+      caution_reason: '음식이 쏟아졌어요',
     },
   ];
   const data = [
     {
-      key: '1',
-      id: 'ans',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      riderNo: 31213,
-      endRiderNo: 88888,
-      phoneNo: 55445,
-      upgrade: 45555,
-      grade: 'master',
+      member_id: '20131234 ',
+      member_nm: '김민석',
+      grade_nm: '플래티넘',
+      deliverer_score: '100',
+      member_tel: '010-5555-4444',
+      deliverer_cautionYn: 'Y',
+      deliverer_grade_updateAt: '2021.06.22',
+      deliverer_licenseNum: '17-55566-79',
+      deliverer_licenseExp: '2023.11.23',
     },
     {
-      key: '2',
-      name: 'John Brown',
-      id: 'ans1',
-      age: 32,
-      address: 'New York No. 2 Lake Park',
-      riderNo: 13248523,
-      endRiderNo: 132,
-      phoneNo: 5555,
-      upgrade: 4878,
-      grade: 'master',
+      member_id: '20201234 ',
+      member_nm: '강정무',
+      grade_nm: '브론즈',
+      deliverer_score: '100',
+      deliverer_cautionYn: 'Y',
+      member_tel: '010-5555-4444',
+      deliverer_grade_updateAt: '2021.06.22',
+      deliverer_licenseNum: '17-55566-79',
+      deliverer_licenseExp: '2023.11.23',
     },
     {
-      key: '3',
-      id: 'ans2',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 3 Lake Park',
-      riderNo: 123456,
-      endRiderNo: 11.2,
-      phoneNo: '01055556666',
-      upgrade: 1.22,
-      grade: 'gold',
+      member_id: '20150001 ',
+      member_nm: '문창희',
+      grade_nm: '마스터',
+      deliverer_score: '100',
+      deliverer_cautionYn: 'Y',
+      member_tel: '010-5555-4444',
+      deliverer_grade_updateAt: '2021.06.22',
+      deliverer_licenseNum: '17-55566-79',
+      deliverer_licenseExp: '2023.11.23',
+    },
+    {
+      member_id: '20150002 ',
+      member_nm: '박준혁',
+      grade_nm: '실버',
+      deliverer_score: '100',
+      deliverer_cautionYn: 'Y',
+      member_tel: '010-5555-4444',
+      deliverer_grade_updateAt: '2021.06.22',
+      deliverer_licenseNum: '17-55566-79',
+      deliverer_licenseExp: '2023.11.23',
+    },
+    {
+      member_id: '20151252 ',
+      member_nm: '이균환',
+      grade_nm: '브론즈',
+      deliverer_score: '100',
+      member_tel: '010-5555-4444',
+      deliverer_cautionYn: 'Y',
+      deliverer_grade_updateAt: '2021.06.22',
+      deliverer_licenseNum: '17-55566-79',
+      deliverer_licenseExp: '2023.11.23',
+    },
+    {
+      member_id: '20152553  ',
+      member_nm: '류현태',
+      grade_nm: '브론즈',
+      deliverer_score: '100',
+      member_tel: '010-5555-4443',
+      deliverer_cautionYn: 'Y',
+      deliverer_grade_updateAt: '2021.06.22',
+      deliverer_licenseNum: '17-55566-79',
+      deliverer_licenseExp: '2023.11.23',
     },
   ];
   const onChange = (e) => {
@@ -144,12 +175,13 @@ const RiderManagePresenter = ({ riderList }) => {
         >
           <Table
             columns={columns}
-            dataSource={riderList}
+            // dataSource={riderList}
+            dataSource={data}
             size="middle"
             onRow={(e) => ({
               onClick: () => {
                 console.log(e);
-
+                setExyn(e.deliverer_cautionYn);
                 setRiderData(e);
                 setVisible(true);
                 Axios.get(
@@ -176,54 +208,56 @@ const RiderManagePresenter = ({ riderList }) => {
       >
         <Row gutter={[16, 24]}>
           <Col className="gutter-row" span={6}>
-            아이디: <Text code>{riderDetailData.member_id}</Text>
+            아이디:{' '}
+            <Text code>
+              {/**{riderDetailData.member_id}**/}
+              {riderData.member_id}
+            </Text>
           </Col>
           <Col className="gutter-row" span={6}>
-            이름: <Text code>{riderDetailData.member_nm}</Text>
+            이름: <Text code>{riderData.member_nm}</Text>
           </Col>
-          {/**<Col className="gutter-row" span={6}>
-            나이: <Text code>{riderDetailData.age}</Text>
-          </Col>**/}
+
           <Col className="gutter-row" span={6}>
             전화번호:
-            <Text code>{riderDetailData.member_tel}</Text>
+            <Text code>{riderData.member_tel}</Text>
           </Col>
-          {/**<Col className="gutter-row" span={6}>
-            주소:<Text code>{riderDetailData.address}</Text>
-        </Col>**/}
+
           <Col className="gutter-row" span={6}>
             면허 번호:
-            <Text code>{riderDetailData.deliverer_licenseNum}</Text>
+            <Text code>{riderData.deliverer_licenseNum}</Text>
           </Col>
           <Col className="gutter-row" span={6}>
             면허 만료일:
-            <Text code>{riderDetailData.deliverer_licenseExp}</Text>
+            <Text code>{riderData.deliverer_licenseExp}</Text>
           </Col>
           <Col className="gutter-row" span={6}>
             등급 상승 예정 일자:{' '}
-            <Text code>{riderDetailData.deliverer_grade_updateAt}</Text>
+            <Text code>{riderData.deliverer_grade_updateAt}</Text>
           </Col>
         </Row>
 
         <div style={{ float: 'left' }}>
-          <Checkbox onChange={onChange} checked={deliverer_cautionYn}>
+          {/**<Checkbox onChange={onChange} checked={deliverer_cautionYn}>**/}
+          <Checkbox onChange={onChange} checked={exyn}>
             경고유무
           </Checkbox>
         </div>
         <div style={{ float: 'right' }}>
           <Form.Item label="점수">
-            <Input value={riderDetailData.deliverer_score} />
+            <Input value={riderData.deliverer_score} />
           </Form.Item>
         </div>
         <div style={{ float: 'right' }}>
           <Form.Item label="등급">
-            <Input value={riderDetailData.grade_nm} />
+            <Input value={riderData.grade_nm} />
           </Form.Item>
         </div>
         <Table
           bordered
           columns={Modalcolumns}
-          dataSource={riderDetailData.caution_list}
+          // dataSource={riderDetailData.caution_list}
+          dataSource={ModalcolumnsData}
           size="middle"
           scroll={{ y: 100 }}
         />
