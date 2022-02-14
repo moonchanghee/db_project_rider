@@ -1,1 +1,11 @@
-notion : https://www.notion.so/37db3988a342479797f8a430b00ba8cc
+라이더 ui
+- react, spring 간 socket 통신
+- 매장이 고객들의 후기를 바탕으로 배달원에게 벌점을 부여하는 시스템
+- 배달원 매칭 시 배달원에 대한 벌점을 확인하며 배달원 매칭을 수락 및 거절할 수 있음
+- 해당 업체의 배달원들은 벌점 순위에 따라 매칭 순위가 정해짐
+- 벌점은 3개월에 한번씩 갱신됨
+
+
+
+
+notion : https://www.notion.so/8d1041f57cb447d2b0d81ffa4d1402ee
