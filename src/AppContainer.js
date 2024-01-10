@@ -1,13 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import App from './App';
 import produce from 'immer';
-import Axios from 'axios';
 
 const AppContainer = () => {
-  // useEffect(() => {
-  //  console.log("dd")
-  // })
-
   const webSocket = new WebSocket('ws://192.168.64.94:8080/echo');
   const [store, setStore] = useState(false);
   const [data, setData] = useState([{}]);

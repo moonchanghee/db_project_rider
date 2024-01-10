@@ -1,58 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import {
   DatePicker,
-  Space,
   TimePicker,
-  Select,
   Input,
-  Layout,
   Table,
-  Tag,
-  Modal,
   Button,
   Divider,
   message,
 } from 'antd';
-import Cookie from 'js-cookie';
 import Axios from 'axios';
 const { RangePicker } = DatePicker;
 const data = [
-  // {
-  //   orderNo: 1,
-  //   time: '2020-12-04 15:43:28',
-  //   method: '카드',
-  //   price: '22000',
-  //   menu: '동서 후라이드 외 1',
-  //   grade: '',
-  //   state: '배달대기',
-  // },
-  // {
-  //   orderNo: 2,
-  //   time: '2020-12-04 20:40:56',
-  //   method: '카드',
-  //   price: '23000',
-  //   menu: '동서 양념 외 1 ',
-  //   grade: '',
-  //   state: '배달대기',
-  // },
-  // {
-  //   orderNo: 3,
-  //   time: '2020-12-04 20:40:56',
-  //   method: '카드',
-  //   price: '32000',
-  //   menu: '불고기 피자 외 3',
-  //   grade: '',
-  //   state: '배달대기',
-  // },
-  // {
-  //   orderNo: 4,
-  //   time: '2020-12-04 21:27:05',
-  //   method: '카드',
-  //   price: '30000',
-  //   menu: '포테이토 피자 외 2',
-  //   grade: '',
-  //   state: '배달대기',
-  // },
   {
     orderNo: 5,
     time: '2020-12-04 21:28:11',
@@ -149,8 +107,8 @@ const columns = [
 ];
 var arr = [];
 
-const MainPresenter = ({ states, callbacks }) => {
-  const [updata, setupdata] = useState([{}]);
+const MainPresenter = ({ states }) => {
+  const [update, setUpdate] = useState([{}]);
   useEffect(() => {
     Axios.get('http://192.168.64.94:8080/v1/company/order/list', {
       headers: {
@@ -158,26 +116,16 @@ const MainPresenter = ({ states, callbacks }) => {
         'Content-Type': 'application/json;charset=UTF-8',
       },
     }).then((e) => {
-      console.log(e.data.data);
-      setupdata(e.data.data);
+      setUpdate(e.data.data);
     });
   }, []);
-  states.webSocket.onopen = () => {
-    console.log('오픈');
-    states.webSocket.onmessage = function (event) {
-      console.log(event.data);
-    };
-  };
 
-  const [visible, setVisible] = useState(false);
-  const { Option } = Select;
   const { Search } = Input;
-  const onSearch = (value) => console.log(value);
   const [type, setType] = useState('time');
   const [matchRider, setMatchRider] = useState(false);
   const [RiderData, setRiderData] = useState();
   const [orderNo, setOrderNo] = useState();
-  const [sibal, setsibal] = useState();
+  const [number, setNumber] = useState();
   const PickerWithType = ({ type, onChange }) => {
     return <TimePicker onChange={onChange} />;
   };
@@ -185,19 +133,16 @@ const MainPresenter = ({ states, callbacks }) => {
 
   const reject = () => {
     arr = [];
-    console.log('거절되었습니다');
     setMatchRider(false);
-    console.log(arr[0]);
   };
   const Success = () => {
-    states.webSocket.send(`${states.session},${sibal},${arr[0]}`);
-    data[sibal - 5]['grade'] = RiderData;
-    data[sibal - 5]['state'] = '배달중';
+    states.webSocket.send(`${states.session},${orderSequence},${arr[0]}`);
+    data[orderSequence - 5]['grade'] = RiderData;
+    data[orderSequence - 5]['state'] = '배달중';
     const body = {
       deliverer_id: arr[0],
-      order_seq: sibal,
+      order_seq: orderSequence,
     };
-    console.log(sibal);
     Axios.post(
       'http://192.168.64.94:8080/v1/company/order/match',
       body
@@ -222,32 +167,24 @@ const MainPresenter = ({ states, callbacks }) => {
           />
           <PickerWithType
             type={type}
-            onChange={(value) => console.log(value)}
           />
           <Search
             placeholder=""
             allowClear
-            onSearch={onSearch}
             style={{ width: '250px', marginLeft: '150px' }}
           />
         </div>
         <Table
           columns={columns}
           dataSource={data}
-          // dataSource={updata}
           pagination={{ pageSize: 3 }}
           onRow={(val, index) => ({
             onClick: () => {
-              console.log(val);
-              console.log(val.orderNo);
-              setsibal(val.orderNo);
+              setNumber(val.orderNo);
               states.webSocket.send(`${states.session}, ${val.orderNo}`);
               message.loading({ content: '요청중..', key });
               states.webSocket.onmessage = function (event) {
-                console.log(event);
                 arr.push(event.data);
-                console.log(arr);
-                console.log(arr.length);
                 if (arr.length === 5) {
                   setTimeout(() => {
                     message.success({

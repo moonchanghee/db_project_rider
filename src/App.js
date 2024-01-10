@@ -6,9 +6,6 @@ import { Layout } from 'antd';
 import 'antd/dist/antd.css';
 const { Footer } = Layout;
 const App = ({ states, callbacks }) => {
-  console.log(states);
-  console.log(callbacks);
-
   return (
     <>
       <Layout style={{ minHeight: '100vh' }}>

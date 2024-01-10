@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import Axios from 'axios';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Layout, Form, Input, Button, Radio, message } from 'antd';
 import './login.css';
 import Cookie from 'js-cookie';
@@ -13,17 +12,14 @@ const LoginPresenter = ({ states, callbacks }) => {
   const [userPwd, setUserPwd] = useState();
   const [value, setValue] = useState(1);
   const pwdChange = (e) => {
-    console.log(e);
     setUserPwd(e.currentTarget.value);
   };
 
   const idChange = (e) => {
-    console.log(e);
     setUserId(e.currentTarget.value);
   };
 
   const onChange = (e) => {
-    console.log(e.target.value);
     setValue(e.target.value);
     if (e.target.value === 1) {
       callbacks.setStore(false);
@@ -34,16 +30,7 @@ const LoginPresenter = ({ states, callbacks }) => {
 
   const gomain = async () => {
     message.loading({ content: 'Loading...', key });
-    const body = {
-      member_id: userId,
-      member_pw: userPwd,
-    };
-
     if (states.store) {
-      // Axios.post('http://192.168.64.94:8080/v1/auth/shop', body).then((e) => {
-      // if (e.data.msg) {
-      // console.log(e);
-      // Cookie.set('JSESSIONID', e.data.data.Authorization);
       callbacks.setsession(Cookie.get('JSESSIONID'));
       setTimeout(() => {
         message.success({
@@ -53,8 +40,6 @@ const LoginPresenter = ({ states, callbacks }) => {
         });
         history.push('/main');
       }, 400);
-      // }
-      // else {
       setTimeout(() => {
         message.success({
           content: '로그인 실패',
@@ -63,8 +48,6 @@ const LoginPresenter = ({ states, callbacks }) => {
         });
       }, 400);
     }
-    // });
-    // }
     else {
       console.log('관리자 로그인');
       setTimeout(() => {

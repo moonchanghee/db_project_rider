@@ -1,16 +1,9 @@
-import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import {  useHistory } from 'react-router-dom';
 import { Layout, Menu, Button, message } from 'antd';
 const { Header } = Layout;
 const HeaderPresenter = (props) => {
   const key = 'updatable';
   let history = useHistory();
-  const goMain = () => {
-    console.log('dd');
-  };
-  const goMain2 = () => {
-    console.log('dd');
-  };
   const logout = () => {
     message.loading({ content: 'Loading...', key });
     props.props.states.webSocket.close();
@@ -23,7 +16,6 @@ const HeaderPresenter = (props) => {
       history.push('/');
     }, 400);
   };
-  console.log(props);
   return (
     <>
       {props.props.states.store ? (
@@ -31,9 +23,6 @@ const HeaderPresenter = (props) => {
           <p
             style={{
               color: '#FFFFFF',
-            }}
-            onClick={() => {
-              goMain();
             }}
           >
             매장입니다
@@ -52,9 +41,6 @@ const HeaderPresenter = (props) => {
         <Header>
           <div
             style={{ color: '#FFFFFF' }}
-            onClick={() => {
-              goMain2();
-            }}
           >
             관리자입니다
             <Button onClick={logout} style={{ marginLeft: '80%' }}>

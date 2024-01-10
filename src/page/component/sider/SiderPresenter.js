@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import Axios from 'axios';
 const { Sider } = Layout;
-const { SubMenu } = Menu;
 const SiderPresenter = (props) => {
-  // const [store, setStore] = useState(true);
   const call = () => {
     console.log('dddddd');
     console.log(props.props.states.session);
@@ -15,12 +12,7 @@ const SiderPresenter = (props) => {
         'Content-Type': 'application/json;charset=UTF-8',
       },
     }).then((e) => {
-      console.log(e);
       props.props.callbacks.setendlist(e.data.data);
-      // if (e.data.data.caution_title != null) {
-      //   props.props.callbacks.setcheck(true);
-      //   console.log('dddd');
-      // }
     });
   };
   return (
